@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Lamda and cloud Formation demo API
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+    Name: "AWS Demo APIs"
+Resources:
+  PersonTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+          Name: id
+          Type: Number
+      TableName: Person
+  VehicleTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: vin
+        Type: Number
+      TableName: Vehicle
+  StorePersonFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.sigma.lambda.apigateway.APIDemoHandler::handleRequest
+      Runtime: java8
+      Timeout: 15
+      MemorySize: 512
+      CodeUri: ../target/aws-lambda-0.1.0-SNAPSHOT.jar
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref VehicleTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref VehicleTable
+      Events:
+        StoreApi:
+          Type: Api
+          Properties:
+            Path: /persons
+            Method: PUT
+  StoreVehicleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.sigma.lambda.apigateway.APIDemoHandler::handleRequestStoreVehicle
+      Runtime: java8
+      Timeout: 15
+      MemorySize: 512
+      CodeUri: ../target/aws-lambda-0.1.0-SNAPSHOT.jar
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref VehicleTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref VehicleTable
+      Events:
+        StoreApi:
+          Type: Api
+          Properties:
+            Path: /vehicles
+            Method: PUT
+
+  GetPersonByHTTPParamFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.sigma.lambda.apigateway.APIDemoHandler::handleGetByParam
+      Runtime: java8
+      Timeout: 15
+      MemorySize: 512
+      CodeUri: ../target/aws-lambda-0.1.0-SNAPSHOT.jar
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref PersonTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref PersonTable
+      Events:
+        GetByPathApi:
+          Type: Api
+          Properties:
+            Path: /persons/{id}
+            Method: GET
+        GetByQueryApi:
+          Type: Api
+          Properties:
+            Path: /persons
+            Method: GET
