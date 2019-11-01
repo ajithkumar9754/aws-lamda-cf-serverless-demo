@@ -2,7 +2,7 @@
 
 Setup AWS cloud account
 
-seup S3 repositoty through AWS console
+seup S3 bucket through AWS console
 
 Setup AWS SDK in local
 
