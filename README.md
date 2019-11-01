@@ -37,7 +37,7 @@ Sample request JSONs
 }
 
 
-/vehicle PUT
+/persons PUT
 {
     "id": 2,
     "name": "Ajith"
