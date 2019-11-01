@@ -25,3 +25,20 @@ Login to AWS console, Navigate to Cloud formation and check the stack created wi
 Then Navigate to API Gateway
 
 Verify the API's created or not. We have option to execute our API's from there itself.
+
+Sample request JSONs
+
+/vehicle PUT
+{
+    "vin": 2005,
+    "make": "Mercedes Benz",
+	"model": "S class",
+    "year": 2019
+}
+
+
+/vehicle PUT
+{
+    "id": 2,
+    "name": "Ajith"
+}
